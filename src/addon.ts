@@ -12,6 +12,7 @@ class Addon {
     restoreSearchConditions?: () => void;
     pdfPageCountColumnDataKey?: string | false;
     pdfPageCountNotifierID?: string;
+    startupError?: unknown;
     ztoolkit: ZToolkit;
   };
   // Lifecycle hooks

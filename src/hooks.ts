@@ -14,14 +14,19 @@ async function onStartup() {
     Zotero.uiReadyPromise,
   ]);
 
-  await refreshPDFPageCounts();
-  addon.data.restoreSearchConditions = installPDFPageCountSearchCondition();
-  addon.data.pdfPageCountColumnDataKey = registerPDFPageCountColumn();
-  addon.data.pdfPageCountNotifierID = registerPDFPageCountNotifier();
-
-  // Mark initialized as true to confirm plugin loading status
-  // outside of the plugin (e.g. scaffold testing process)
-  addon.data.initialized = true;
+  try {
+    await refreshPDFPageCounts();
+    addon.data.restoreSearchConditions = installPDFPageCountSearchCondition();
+    addon.data.pdfPageCountColumnDataKey = registerPDFPageCountColumn();
+    addon.data.pdfPageCountNotifierID = registerPDFPageCountNotifier();
+  } catch (error) {
+    addon.data.startupError = error;
+    throw error;
+  } finally {
+    // Mark initialized as true to confirm plugin loading status
+    // outside of the plugin (e.g. scaffold testing process)
+    addon.data.initialized = true;
+  }
 }
 
 async function onMainWindowLoad(_win: _ZoteroTypes.MainWindow): Promise<void> {
