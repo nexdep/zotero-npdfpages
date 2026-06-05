@@ -3,6 +3,7 @@ import {
   clearPDFPageCounts,
   getItemPDFPageCount,
   getSortablePDFPageCount,
+  refreshPDFPageCounts,
 } from "../src/modules/pdfPageCount";
 
 describe("PDF page count helpers", function () {
@@ -17,5 +18,28 @@ describe("PDF page count helpers", function () {
 
   it("should pad sortable values for numeric sorting", function () {
     assert.equal(getSortablePDFPageCount({ id: 123 }), "0000000000");
+  });
+
+  it("should load page counts from Zotero DB array-like rows", async function () {
+    const originalQueryAsync = Zotero.DB.queryAsync;
+    const rows = {
+      0: { itemID: 123, pages: 42 },
+      1: { itemID: "456", pages: "7" },
+      length: 2,
+    } as ArrayLike<{ itemID: number | string; pages: number | string }>;
+
+    Zotero.DB.queryAsync = (async () =>
+      rows as unknown as Awaited<
+        ReturnType<typeof Zotero.DB.queryAsync>
+      >) as typeof Zotero.DB.queryAsync;
+
+    try {
+      await refreshPDFPageCounts();
+    } finally {
+      Zotero.DB.queryAsync = originalQueryAsync;
+    }
+
+    assert.equal(getItemPDFPageCount({ id: 123 }), 42);
+    assert.equal(getItemPDFPageCount({ id: 456 }), 7);
   });
 });

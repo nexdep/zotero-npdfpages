@@ -80,7 +80,7 @@ const pdfPageCountSearchCondition = {
 
 export async function refreshPDFPageCounts(): Promise<void> {
   const result = await Zotero.DB.queryAsync(PDF_PAGE_COUNT_CACHE_SQL);
-  const rows = Array.isArray(result) ? (result as PageCountRow[]) : [];
+  const rows = Array.from((result ?? []) as unknown as ArrayLike<PageCountRow>);
 
   pdfPageCounts = new Map(
     rows.map((row) => [Number(row.itemID), Number(row.pages) || 0]),
