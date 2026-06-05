@@ -1,5 +1,4 @@
 import { assert } from "chai";
-import { beforeEach, describe, it } from "mocha";
 import {
   clearPDFPageCounts,
   getItemPDFPageCount,
