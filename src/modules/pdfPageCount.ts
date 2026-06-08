@@ -26,8 +26,7 @@ const PDF_PAGE_COUNT_SQL_FIELD = `
     ), 0)
   ) AS TEXT)
 `;
-const PDF_PAGE_COUNT_CACHE_SQL = `
-  SELECT itemID, SUM(pages) AS pages
+const PDF_PAGE_COUNT_CACHE_SQL = `SELECT itemID, SUM(pages) AS pages
   FROM (
     SELECT IA.itemID AS itemID, COALESCE(FI.totalPages, 0) AS pages
     FROM itemAttachments IA
