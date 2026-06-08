@@ -1,7 +1,7 @@
 {
   "name": "zotero-npdfpages",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Adds a sortable PDF page-count column and PDF page-count advanced-search condition to Zotero.",
   "config": {
     "addonName": "NPDFPages",
